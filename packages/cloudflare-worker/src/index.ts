@@ -1,4 +1,4 @@
-import { Env, AnalyzeRequest, HealthResponse } from './types';
+import { Env, AnalyzeRequest, AnalyzeTextRequest, HealthResponse } from './types';
 import { JinaClient } from './jina/client';
 import { GeoAnalyzer } from './analyzer/geo-analyzer';
 
@@ -82,6 +82,46 @@ export default {
           {
             competitorUrls: body.competitorUrls,
             autoDiscoverCompetitors: body.autoDiscoverCompetitors,
+            aiModel: body.aiModel,
+          }
+        );
+        
+        const response: GeoApiResponse = {
+          ...result,
+          meta: {
+            ...result.meta,
+            processingTime: Date.now() - startTime,
+          },
+        };
+
+        return new Response(JSON.stringify(response), {
+          status: 200,
+          headers: corsHeaders,
+        });
+      }
+
+      if (path === '/api/analyze-text' && request.method === 'POST') {
+        const body = await request.json() as AnalyzeTextRequest;
+        
+        if (!body.content || !body.query) {
+          return new Response(
+            JSON.stringify({ error: 'Missing required fields: content, query' }),
+            { status: 400, headers: corsHeaders }
+          );
+        }
+
+        const startTime = Date.now();
+        
+        const jinaClient = new JinaClient();
+        const analyzer = new GeoAnalyzer(env.AI, jinaClient);
+        
+        const result = await analyzer.analyzeText(
+          body.content,
+          body.query,
+          {
+            title: body.title,
+            url: body.url,
+            aiModel: body.aiModel,
           }
         );
         

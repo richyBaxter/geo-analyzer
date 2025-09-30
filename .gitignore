@@ -33,3 +33,16 @@ coverage/
 # Temporary files
 *.tmp
 .cache/
+
+# Test files
+test-*.ps1
+test-*.json
+response.json
+
+# Internal documentation (keep out of git)
+BIAS_FIX_COMPLETE.md
+SECURITY_CLEANUP_COMPLETE.md
+PRODUCTION_READY_SUMMARY.md
+HANDOVER*.md
+OPTION_B*.md
+PROJECT_STATUS.md

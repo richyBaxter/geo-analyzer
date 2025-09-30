@@ -12,8 +12,7 @@ export interface GeoRecommendation {
   location: string;
   currentText: string;
   suggestedText: string;
-  expectedImpact: number;
-  researchEvidence: string;
+  rationale: string;
 }
 
 export interface CompetitorAnalysis {

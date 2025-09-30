@@ -315,21 +315,19 @@ export class PatternAnalyzer {
         priority: 'high',
         location: 'Throughout document',
         currentText: `Average sentence length: ${metrics.sentenceLength.average} words`,
-        suggestedText: 'Break long sentences into shorter ones (15-20 words)',
-        expectedImpact: 15,
-        researchEvidence: 'Research shows +15% improvement in extractability',
+        suggestedText: 'Break long sentences into shorter ones (15-20 words) to improve AI parsing and fact extraction',
+        rationale: 'Shorter sentences are easier for AI systems to parse and extract discrete facts from. The optimal length for LLM comprehension is 15-20 words per sentence.',
       });
     }
     
     if (metrics.claimDensity.current < metrics.claimDensity.target) {
       recommendations.push({
-        method: 'Quotation Addition',
+        method: 'Claim Density Enhancement',
         priority: 'high',
         location: 'Key sections',
         currentText: `${metrics.claimDensity.current} claims per 100 words`,
-        suggestedText: 'Add specific statistics, numbers, and factual claims',
-        expectedImpact: 41,
-        researchEvidence: 'Research shows +41% improvement with quote addition',
+        suggestedText: `Add specific statistics, numbers, and factual claims to increase claim density towards target of ${metrics.claimDensity.target} per 100 words`,
+        rationale: 'Higher claim density provides more extractable facts for AI systems to cite. Quantitative statements, statistics, and specific claims are easier for LLMs to verify and reference.',
       });
     }
     
@@ -339,9 +337,19 @@ export class PatternAnalyzer {
         priority: 'medium',
         location: 'Claims and statistics',
         currentText: `${metrics.dateMarkers.found} temporal markers found`,
-        suggestedText: 'Add dates to claims (e.g., "As of 2024...", "In Q2 2025...")',
-        expectedImpact: 20,
-        researchEvidence: 'Improves claim verifiability and recency signals',
+        suggestedText: 'Add dates to claims (e.g., "As of 2024...", "In Q2 2025...") to establish temporal context',
+        rationale: 'Temporal markers improve claim verifiability and provide freshness signals to AI systems. Dated information helps LLMs assess relevance and recency.',
+      });
+    }
+    
+    if (metrics.structure.headingCount < 3) {
+      recommendations.push({
+        method: 'Structural Enhancement',
+        priority: 'medium',
+        location: 'Document structure',
+        currentText: `${metrics.structure.headingCount} headings found`,
+        suggestedText: 'Add descriptive headings to break content into logical sections, improving both readability and AI parsing',
+        rationale: 'Clear headings help AI systems understand content hierarchy and identify relevant sections for specific queries. Structured content is easier to chunk and cite.',
       });
     }
     

@@ -9,6 +9,15 @@ export interface AnalyzeRequest {
   competitorUrls?: string[];
   autoDiscoverCompetitors?: boolean;
   jinaApiKey?: string;
+  aiModel?: string;
+}
+
+export interface AnalyzeTextRequest {
+  content: string;
+  query: string;
+  title?: string;
+  url?: string;
+  aiModel?: string;
 }
 
 export interface HealthResponse {

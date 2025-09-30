@@ -1,3 +1,24 @@
+// Import and re-export base types first
+import type {
+  JinaContent,
+  JinaSearchResult,
+} from './jina.types';
+
+import type {
+  GeoScores,
+  SentenceLengthMetrics,
+  ClaimDensityMetrics,
+  DateMarkerMetrics,
+  StructureMetrics,
+  SemanticTripleMetrics,
+  EntityMetrics,
+  QueryAlignmentMetrics,
+} from './geo.types';
+
+export * from './jina.types';
+export * from './geo.types';
+
+// Then export interfaces that depend on them
 export interface ContentChunk {
   content: string;
   semanticCoherence: number;
@@ -12,8 +33,7 @@ export interface GeoRecommendation {
   location: string;
   currentText: string;
   suggestedText: string;
-  expectedImpact: number;
-  researchEvidence: string;
+  rationale: string;
 }
 
 export interface CompetitorAnalysis {
@@ -85,6 +105,3 @@ export interface GeoApiResponse {
     featuresUsed: string[];
   };
 }
-
-export * from './jina.types';
-export * from './geo.types';

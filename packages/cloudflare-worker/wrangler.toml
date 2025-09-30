@@ -1,3 +1,13 @@
+# ⚠️ SECURITY NOTICE ⚠️
+# This Cloudflare Worker should NOT be deployed publicly on workers.dev
+# Each user must deploy their own instance with their own Cloudflare account
+# 
+# DO NOT add routes, custom domains, or publish to workers.dev in this config
+# Users deploy this privately and provide their Worker URL via GEO_WORKER_URL env var
+#
+# Deployment: npx wrangler deploy
+# This creates a private worker accessible only via the returned URL
+
 name = "geo-analyzer"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
@@ -5,7 +15,8 @@ compatibility_date = "2025-01-01"
 [observability]
 enabled = true
 
-ai = { binding = "AI" }
+[ai]
+binding = "AI"
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
