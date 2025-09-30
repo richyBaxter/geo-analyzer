@@ -1,11 +1,16 @@
-import {
-  JinaContent,
-  JinaReaderResponse,
-  JinaSearchResponse,
-  JinaReaderOptions,
-  JinaSearchOptions,
-  JinaError,
-} from '@geo-analyzer/shared';
+import { JinaContent, JinaReaderOptions, JinaSearchOptions, JinaError } from '../types/jina.types';
+
+interface JinaReaderResponse {
+  code: number;
+  status: number;
+  data: JinaContent;
+}
+
+interface JinaSearchResponse {
+  code: number;
+  status: number;
+  data: JinaContent[];
+}
 
 export class JinaClient {
   private baseUrl = 'https://r.jina.ai';

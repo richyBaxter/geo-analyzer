@@ -10,8 +10,5 @@
   },
   "keywords": ["geo", "types"],
   "author": "Houtini",
-  "license": "MIT",
-  "devDependencies": {
-    "typescript": "^5.6.0"
-  }
+  "license": "MIT"
 }

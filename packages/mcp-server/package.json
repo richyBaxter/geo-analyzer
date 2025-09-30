@@ -7,7 +7,7 @@
     "geo-analyzer": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod +x dist/index.js",
+    "build": "tsc && node -e \"require('fs').chmodSync('./dist/index.js', '755')\"",
     "dev": "tsc --watch",
     "test": "echo 'Tests coming soon'"
   },
@@ -15,8 +15,7 @@
   "author": "Houtini",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.4",
-    "@geo-analyzer/shared": "workspace:*"
+    "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

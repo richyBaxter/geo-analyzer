@@ -1,14 +1,35 @@
 import { Env, AnalyzeRequest, HealthResponse } from './types';
-import { GeoApiResponse } from '@geo-analyzer/shared';
 import { JinaClient } from './jina/client';
 import { GeoAnalyzer } from './analyzer/geo-analyzer';
+
+interface GeoApiResponse {
+  request: {
+    url: string;
+    query: string;
+    competitorUrls?: string[];
+    analyzedAt: string;
+  };
+  jinaContent: any;
+  geoAnalysis: any;
+  competitors?: any;
+  usage: {
+    neuronsUsed: number;
+    jinaTokensUsed: number;
+    dailyRemaining: number;
+    cacheHit: boolean;
+  };
+  meta: {
+    version: string;
+    processingTime: number;
+    featuresUsed: string[];
+  };
+}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // CORS headers for all responses
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -16,7 +37,6 @@ export default {
       'Content-Type': 'application/json',
     };
 
-    // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
@@ -25,7 +45,6 @@ export default {
     }
 
     try {
-      // Health check endpoint
       if (path === '/health' && request.method === 'GET') {
         const health: HealthResponse = {
           status: 'healthy',
@@ -42,7 +61,6 @@ export default {
         });
       }
 
-      // Analyze endpoint
       if (path === '/api/analyze' && request.method === 'POST') {
         const body = await request.json() as AnalyzeRequest;
         
@@ -55,11 +73,9 @@ export default {
 
         const startTime = Date.now();
         
-        // Initialize clients
         const jinaClient = new JinaClient(body.jinaApiKey);
         const analyzer = new GeoAnalyzer(env.AI, jinaClient);
         
-        // Perform analysis
         const result = await analyzer.analyze(
           body.url,
           body.query,
@@ -83,7 +99,6 @@ export default {
         });
       }
 
-      // Not found
       return new Response(
         JSON.stringify({ error: 'Not found' }),
         { status: 404, headers: corsHeaders }

@@ -9,7 +9,7 @@ import {
   SemanticTripleMetrics,
   ContentChunk,
   GeoRecommendation,
-} from '@geo-analyzer/shared';
+} from '../types/geo.types';
 
 interface PatternAnalysisResult {
   scores: GeoScores;

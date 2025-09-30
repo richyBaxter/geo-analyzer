@@ -1,16 +1,48 @@
 import { JinaClient } from '../jina/client';
+import { JinaContent, JinaSearchResult } from '../types/jina.types';
 import {
-  JinaContent,
-  JinaSearchResult,
-  GeoApiResponse,
+  GeoScores,
   GeoAnalysis,
   CompetitorAnalysis,
-} from '@geo-analyzer/shared';
+  SentenceLengthMetrics,
+  ClaimDensityMetrics,
+  DateMarkerMetrics,
+  StructureMetrics,
+  EntityMetrics,
+  QueryAlignmentMetrics,
+  SemanticTripleMetrics,
+} from '../types/geo.types';
 import { PatternAnalyzer } from './pattern-analyzer';
 
 interface AnalyzeOptions {
   competitorUrls?: string[];
   autoDiscoverCompetitors?: boolean;
+}
+
+interface GeoApiResponsePartial {
+  request: {
+    url: string;
+    query: string;
+    competitorUrls?: string[];
+    analyzedAt: string;
+  };
+  jinaContent: JinaContent;
+  geoAnalysis: GeoAnalysis;
+  competitors?: {
+    jinaResults: JinaSearchResult;
+    analyses: CompetitorAnalysis[];
+  };
+  usage: {
+    neuronsUsed: number;
+    jinaTokensUsed: number;
+    dailyRemaining: number;
+    cacheHit: boolean;
+  };
+  meta: {
+    version: string;
+    processingTime: number;
+    featuresUsed: string[];
+  };
 }
 
 export class GeoAnalyzer {
@@ -28,7 +60,7 @@ export class GeoAnalyzer {
     url: string,
     targetQuery: string,
     options: AnalyzeOptions = {}
-  ): Promise<Omit<GeoApiResponse, 'meta'>> {
+  ): Promise<Omit<GeoApiResponsePartial, 'meta'>> {
     const jinaContent = await this.jinaClient.read(url, {
       withImageCaptions: true,
       withLinksSummary: true,
