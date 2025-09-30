@@ -2,6 +2,7 @@
   "name": "geo-analyzer",
   "version": "1.0.0",
   "description": "MCP server and Cloudflare Worker for AI search engine optimization using GEO principles",
+  "type": "module",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -12,7 +13,10 @@
     "lint": "npm run lint --workspaces",
     "dev:worker": "npm run dev --workspace=packages/cloudflare-worker",
     "dev:mcp": "npm run dev --workspace=packages/mcp-server",
-    "deploy": "npm run deploy --workspace=packages/cloudflare-worker"
+    "deploy": "npm run deploy --workspace=packages/cloudflare-worker",
+    "publish:mcp": "node scripts/publish-mcp.js",
+    "publish:mcp:minor": "node scripts/publish-mcp.js minor",
+    "publish:mcp:major": "node scripts/publish-mcp.js major"
   },
   "keywords": [
     "mcp",
