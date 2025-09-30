@@ -7,16 +7,16 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
 
-**Analyze how well your content performs in AI-generated responses.**
+**Get an instant GEO (Generative Engine Optimization) analysis of your page: measures Claim Density, Sentence Length, Semantic Triples, Entity Diversity, Breadth of named entities (PERSON, ORG, PRODUCT), Date Markers and Temporal context for freshness signals based on a target keyphrase**
 
 Powered by Model Context Protocol (MCP), this tool brings professional GEO analysis directly into Claude Desktop. Get real-time extractability scores, semantic analysis, and actionable recommendations—all while maintaining complete control over your infrastructure.
 
 ### Why This Matters
 
-**🎯 Private & Powerful**: Deploy your own Cloudflare Worker—your data never touches third-party servers  
+**🎯 Private & Powerful**: Deploy your own Cloudflare Worker - your data never touches third-party servers  
 **🧠 Smart Analysis**: Leverage Jina.ai's Reader API for pristine content extraction and Cloudflare Workers AI for semantic triple detection  
-**⚡ Flexible Models**: Choose from Llama 3.3 70B, Mistral, or other models—switch anytime  
-**📊 MCP Integration**: Native Claude Desktop tool—no copy/paste, no context switching  
+**⚡ Flexible Models**: Choose from Llama 3.3 70B, Mistral, or other models- switch anytime  
+**📊 MCP Integration**: Native Claude Desktop tool - no copy/paste, no context switching  
 **🔧 Full Control**: Your Worker, your API keys, your rate limits, your audit logs
 
 </div>
@@ -33,7 +33,7 @@ Powered by Model Context Protocol (MCP), this tool brings professional GEO analy
 
 ### MCP-Powered Analysis in Claude Desktop
 
-Talk naturally to Claude and get instant GEO analysis—no switching contexts, no external tools, no manual work.
+Talk naturally to Claude and get instant GEO analysis no switching contexts, no external tools, no manual work.
 
 **Three Powerful Tools at Your Command:**
 - **`analyze_url`**: Deep-dive analysis of any webpage with extractability scoring, semantic analysis, and prioritized recommendations
