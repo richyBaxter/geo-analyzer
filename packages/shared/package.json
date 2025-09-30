@@ -1,0 +1,17 @@
+{
+  "name": "@geo-analyzer/shared",
+  "version": "1.0.0",
+  "description": "Shared types and utilities for GEO Analyzer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["geo", "types"],
+  "author": "Houtini",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

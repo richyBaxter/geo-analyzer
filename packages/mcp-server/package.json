@@ -1,0 +1,25 @@
+{
+  "name": "@geo-analyzer/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for GEO analysis",
+  "type": "module",
+  "bin": {
+    "geo-analyzer": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "test": "echo 'Tests coming soon'"
+  },
+  "keywords": ["mcp", "geo"],
+  "author": "Houtini",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@geo-analyzer/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,15 @@
+name = "geo-analyzer"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[observability]
+enabled = true
+
+[[ai]]
+binding = "AI"
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[env.development]
+vars = { ENVIRONMENT = "development" }

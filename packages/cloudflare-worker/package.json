@@ -1,0 +1,23 @@
+{
+  "name": "@geo-analyzer/cloudflare-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker API for GEO analysis",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "echo 'Cloudflare handles build'",
+    "test": "vitest"
+  },
+  "keywords": ["cloudflare", "worker", "geo"],
+  "author": "Houtini",
+  "license": "MIT",
+  "dependencies": {
+    "@geo-analyzer/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "wrangler": "^3.95.0",
+    "vitest": "^2.1.8"
+  }
+}
