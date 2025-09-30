@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![npm version](https://img.shields.io/npm/v/@houtini/geo-analyzer.svg)](https://www.npmjs.com/package/@houtini/geo-analyzer)
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/houtini/geo-analyzer)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
