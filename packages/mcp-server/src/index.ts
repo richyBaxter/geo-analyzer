@@ -34,6 +34,103 @@ if (!GEO_API_URL) {
   process.exit(1);
 }
 
+interface DetailedAnalysisResult {
+  summary: {
+    overall_score: number;
+    rating: string;
+    primary_issues: string[];
+    quick_wins: string[];
+  };
+  scores: {
+    overall: number;
+    extractability: number;
+    readability: number;
+    citability: number;
+  };
+  detailed_analysis: any;
+  recommendations: {
+    high_priority: any[];
+    medium_priority: any[];
+    low_priority: any[];
+  };
+}
+
+function formatDetailedAnalysis(rawResult: any): DetailedAnalysisResult {
+  const scores = rawResult.geoAnalysis?.scores || {};
+  const recommendations = rawResult.geoAnalysis?.recommendations || [];
+  
+  const getRating = (score: number): string => {
+    if (score >= 8) return 'Excellent';
+    if (score >= 6) return 'Good';
+    if (score >= 4) return 'Fair';
+    return 'Needs Improvement';
+  };
+
+  const identifyPrimaryIssues = (scores: any, metrics: any): string[] => {
+    const issues: string[] = [];
+    
+    if (scores.extractability < 6) {
+      issues.push('Low extractability score - content may be difficult for AI engines to parse');
+    }
+    if (scores.readability < 6) {
+      issues.push('Readability issues detected - content may be too complex or poorly structured');
+    }
+    if (scores.citability < 6) {
+      issues.push('Limited citability - lacking verifiable claims and semantic triples');
+    }
+    
+    if (metrics?.sentenceLength?.problematic?.length > 5) {
+      issues.push('Multiple sentences exceed optimal length for AI processing');
+    }
+    
+    if (metrics?.claimDensity?.weakSections?.length > 3) {
+      issues.push('Several content sections lack sufficient factual claims');
+    }
+    
+    return issues.slice(0, 5);
+  };
+
+  const identifyQuickWins = (recommendations: any[]): string[] => {
+    return recommendations
+      .slice(0, 3)
+      .map(rec => `${rec.method}: ${rec.details}`)
+      .filter(Boolean);
+  };
+
+  const prioritiseRecommendations = (recommendations: any[]) => {
+    const high_priority: any[] = [];
+    const medium_priority: any[] = [];
+    const low_priority: any[] = [];
+    
+    recommendations.forEach(rec => {
+      if (rec.impact === 'high' || rec.priority === 'high') {
+        high_priority.push(rec);
+      } else if (rec.impact === 'medium' || rec.priority === 'medium') {
+        medium_priority.push(rec);
+      } else {
+        low_priority.push(rec);
+      }
+    });
+    
+    return { high_priority, medium_priority, low_priority };
+  };
+
+  const metrics = rawResult.geoAnalysis?.metrics || {};
+  const prioritised = prioritiseRecommendations(recommendations);
+
+  return {
+    summary: {
+      overall_score: scores.overall || 0,
+      rating: getRating(scores.overall || 0),
+      primary_issues: identifyPrimaryIssues(scores, metrics),
+      quick_wins: identifyQuickWins(recommendations),
+    },
+    scores,
+    detailed_analysis: rawResult.geoAnalysis,
+    recommendations: prioritised,
+  };
+}
+
 const server = new Server(
   {
     name: 'geo-analyzer',
@@ -51,7 +148,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'analyze_url',
-        description: 'Analyze a URL for AI search engine optimization using GEO principles. Returns detailed metrics, recommendations, and actionable insights.',
+        description: 'Analyze a URL for AI search engine optimization using GEO principles. Returns detailed metrics, recommendations, and actionable insights across all GEO factors with specific improvement suggestions.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -82,13 +179,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 '@cf/mistral/mistral-7b-instruct-v0.1'
               ],
             },
+            output_format: {
+              type: 'string',
+              enum: ['detailed', 'summary'],
+              description: "Output verbosity: 'detailed' (default) includes all suggestions, explanations, and prioritised recommendations; 'summary' provides condensed results",
+              default: 'detailed',
+            },
           },
           required: ['url', 'query'],
         },
       },
       {
         name: 'compare_extractability',
-        description: 'Compare GEO extractability scores across 2-5 URLs side-by-side. Identifies the winner and provides key insights on differences.',
+        description: 'Compare GEO extractability scores across 2-5 URLs side-by-side. Identifies the winner and provides key insights on differences with detailed recommendations for improvement.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -113,13 +216,19 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 '@cf/mistral/mistral-7b-instruct-v0.1'
               ],
             },
+            output_format: {
+              type: 'string',
+              enum: ['detailed', 'summary'],
+              description: "Output verbosity: 'detailed' (default) includes comprehensive comparison and recommendations; 'summary' provides condensed results",
+              default: 'detailed',
+            },
           },
           required: ['urls', 'query'],
         },
       },
       {
         name: 'validate_rewrite',
-        description: 'Compare original content (from URL) vs optimized content (text) to prove GEO improvements. Shows before/after scores with clear improvement metrics and percentage changes.',
+        description: 'Compare original content (from URL) vs optimized content (text) to prove GEO improvements. Shows before/after scores with clear improvement metrics, percentage changes, and actionable next steps.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -149,6 +258,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                 '@cf/mistral/mistral-7b-instruct-v0.1'
               ],
             },
+            output_format: {
+              type: 'string',
+              enum: ['detailed', 'summary'],
+              description: "Output verbosity: 'detailed' (default) includes full before/after analysis with improvement suggestions; 'summary' provides condensed metrics",
+              default: 'detailed',
+            },
           },
           required: ['originalUrl', 'optimizedContent', 'targetQuery'],
         },
@@ -159,12 +274,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === 'analyze_url') {
-    const { url, query, competitorUrls, autoDiscoverCompetitors, aiModel } = request.params.arguments as {
+    const { url, query, competitorUrls, autoDiscoverCompetitors, aiModel, output_format = 'detailed' } = request.params.arguments as {
       url: string;
       query: string;
       competitorUrls?: string[];
       autoDiscoverCompetitors?: boolean;
       aiModel?: string;
+      output_format?: 'detailed' | 'summary';
     };
 
     if (!url || !query) {
@@ -194,11 +310,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       const result = await response.json();
 
+      const formattedResult = output_format === 'detailed' 
+        ? formatDetailedAnalysis(result)
+        : {
+            scores: result.geoAnalysis?.scores,
+            top_recommendations: result.geoAnalysis?.recommendations?.slice(0, 3),
+          };
+
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(result, null, 2),
+            text: JSON.stringify(formattedResult, null, 2),
           },
         ],
       };
@@ -209,10 +332,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   if (request.params.name === 'compare_extractability') {
-    const { urls, query, aiModel } = request.params.arguments as {
+    const { urls, query, aiModel, output_format = 'detailed' } = request.params.arguments as {
       urls: string[];
       query: string;
       aiModel?: string;
+      output_format?: 'detailed' | 'summary';
     };
 
     if (!urls || !Array.isArray(urls) || urls.length < 2) {
@@ -299,7 +423,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         );
       }
 
-      const comparison = {
+      const comparison: any = {
         comparison: {
           query,
           analyzedAt: new Date().toISOString(),
@@ -331,6 +455,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         errors: errors.length > 0 ? errors : undefined,
       };
 
+      if (output_format === 'detailed') {
+        comparison.detailed_recommendations = results.map((r, index) => ({
+          url: r.url,
+          rank: index + 1,
+          improvement_areas: r.recommendations?.slice(0, 5).map((rec: any) => ({
+            method: rec.method,
+            details: rec.details,
+            impact: rec.impact,
+          })),
+        }));
+      }
+
       return {
         content: [
           {
@@ -346,16 +482,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   if (request.params.name === 'validate_rewrite') {
-    const { originalUrl, optimizedContent, targetQuery, title, aiModel } = request.params.arguments as {
+    const { originalUrl, optimizedContent, targetQuery, title, aiModel, output_format = 'detailed' } = request.params.arguments as {
       originalUrl: string;
       optimizedContent: string;
       targetQuery: string;
       title?: string;
       aiModel?: string;
+      output_format?: 'detailed' | 'summary';
     };
 
     if (!originalUrl || !optimizedContent || !targetQuery) {
       throw new Error('Missing required parameters: originalUrl, optimizedContent, and targetQuery');
+    }
+
+    const MAX_CONTENT_SIZE = 1_000_000;
+    if (optimizedContent.length > MAX_CONTENT_SIZE) {
+      throw new Error(`Content exceeds maximum size of ${MAX_CONTENT_SIZE} characters (${Math.round(optimizedContent.length / 1024)}KB provided)`);
     }
 
     try {
@@ -471,7 +613,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       if (!readabilityChange.improved) regressions.push('Readability decreased');
       if (!citabilityChange.improved) regressions.push('Citability decreased');
 
-      const validation = {
+      const validation: any = {
         comparison: {
           query: targetQuery,
           analyzedAt: new Date().toISOString(),
@@ -497,11 +639,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         },
         metrics: metricComparisons,
         regressions: regressions.length > 0 ? regressions : undefined,
-        recommendations: {
+      };
+
+      if (output_format === 'detailed') {
+        validation.recommendations = {
           before: originalResult.geoAnalysis?.recommendations?.slice(0, 3),
           after: optimizedResult.geoAnalysis?.recommendations?.slice(0, 3),
-        },
-      };
+        };
+        validation.next_steps = regressions.length > 0
+          ? ['Address the identified regressions', 'Review areas that did not improve']
+          : ['Content successfully optimised', 'Consider A/B testing the changes'];
+      }
 
       return {
         content: [

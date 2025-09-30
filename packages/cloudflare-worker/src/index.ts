@@ -110,6 +110,17 @@ export default {
           );
         }
 
+        // Security: Limit content size to prevent excessive resource consumption
+        const MAX_CONTENT_SIZE = 1_000_000; // 1MB
+        if (body.content.length > MAX_CONTENT_SIZE) {
+          return new Response(
+            JSON.stringify({ 
+              error: `Content exceeds maximum size of ${MAX_CONTENT_SIZE} characters (${Math.round(body.content.length / 1024)}KB provided)` 
+            }),
+            { status: 413, headers: corsHeaders }
+          );
+        }
+
         const startTime = Date.now();
         
         const jinaClient = new JinaClient();

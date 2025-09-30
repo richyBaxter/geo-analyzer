@@ -12,8 +12,16 @@
     "test": "echo 'Tests coming soon'"
   },
   "keywords": ["mcp", "geo"],
-  "author": "Houtini",
+  "author": {
+    "name": "Houtini",
+    "email": "hello@houtini.ai",
+    "url": "https://houtini.ai"
+  },
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4"
   },

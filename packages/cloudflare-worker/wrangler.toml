@@ -1,12 +1,12 @@
-# ⚠️ SECURITY NOTICE ⚠️
+# ⚠️ IMPORTANT: PRIVATE DEPLOYMENT ONLY ⚠️
 # This Cloudflare Worker should NOT be deployed publicly on workers.dev
 # Each user must deploy their own instance with their own Cloudflare account
 # 
-# DO NOT add routes, custom domains, or publish to workers.dev in this config
-# Users deploy this privately and provide their Worker URL via GEO_WORKER_URL env var
-#
-# Deployment: npx wrangler deploy
-# This creates a private worker accessible only via the returned URL
+# The Deploy to Cloudflare button will:
+# 1. Fork this repo to your GitHub account
+# 2. Prompt for required environment variables
+# 3. Deploy a PRIVATE worker to your Cloudflare account
+# 4. You'll use the Worker URL as GEO_WORKER_URL in Claude Desktop
 
 name = "geo-analyzer"
 main = "src/index.ts"
@@ -18,6 +18,15 @@ enabled = true
 [ai]
 binding = "AI"
 
+# These variables will be prompted during Deploy to Cloudflare button flow
+[vars]
+ENVIRONMENT = "production"
+
+# Build configuration for Deploy to Cloudflare
+[build]
+command = ""
+
+# Environment-specific configurations
 [env.production]
 vars = { ENVIRONMENT = "production" }
 

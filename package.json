@@ -22,8 +22,16 @@
     "cloudflare",
     "jina"
   ],
-  "author": "Houtini",
+  "author": {
+    "name": "Houtini",
+    "email": "hello@houtini.ai",
+    "url": "https://houtini.ai"
+  },
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/houtini/geo-analyzer.git"
