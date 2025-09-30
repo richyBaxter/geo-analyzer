@@ -22,11 +22,7 @@ Powered by Model Context Protocol (MCP), this tool brings professional GEO analy
 </div>
 
 <div align="center">
-  <a href="https://github.com/houtini-ai/geo-analyzer/raw/main/docs/demo.mp4">
-    <img src="docs/demo.jpg" alt="GEO Analysis Demo" width="800">
-    <br>
-    <em>▶️ Click to watch the demo video</em>
-  </a>
+  <img src="docs/demo.jpg" alt="GEO Analysis Demo" width="800">
 </div>
 
 *Claude analyzing a page and providing actionable GEO recommendations*
