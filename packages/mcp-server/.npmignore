@@ -16,3 +16,6 @@ node_modules/
 # Git files
 .git/
 .gitignore
+
+# Media files (only needed on GitHub)
+docs/
