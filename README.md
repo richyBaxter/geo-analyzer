@@ -1,4 +1,4 @@
-# 🚀 GEO Analyzer MCP
+# 🚀 GEO Analyser MCP
 
 <div align="center">
 
@@ -7,15 +7,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
 
-**Get an instant GEO (Generative Engine Optimization) analysis of your page: measures Claim Density, Sentence Length, Semantic Triples, Entity Diversity, Breadth of named entities (PERSON, ORG, PRODUCT), Date Markers and Temporal context for freshness signals based on a target keyphrase**
+**Get an instant GEO (Generative Engine Optimisation) analysis of your page: measures Claim Density, Sentence Length, Semantic Triples, Entity Diversity, Breadth of named entities (PERSON, ORG, PRODUCT), Date Markers and Temporal context for freshness signals based on a target keyphrase**
 
-Powered by Model Context Protocol (MCP), this tool brings professional GEO analysis directly into Claude Desktop. Get real-time extractability scores, semantic analysis, and actionable recommendations—all while maintaining complete control over your infrastructure.
+Powered by Model Context Protocol (MCP), this tool brings professional GEO analysis directly into Claude Desktop. Get real-time extractability scores, semantic analysis, and actionable recommendations, all while maintaining complete control over your infrastructure running from your free Cloudflare account.
 
 ### Why This Matters
 
 **🎯 Private & Powerful**: Deploy your own Cloudflare Worker - your data never touches third-party servers  
 **🧠 Smart Analysis**: Leverage Jina.ai's Reader API for pristine content extraction and Cloudflare Workers AI for semantic triple detection  
-**⚡ Flexible Models**: Choose from Llama 3.3 70B, Mistral, or other models- switch anytime  
+**⚡ Flexible Models**: Choose from Llama 3.3 70B, Mistral, or other models - switch anytime  
 **📊 MCP Integration**: Native Claude Desktop tool - no copy/paste, no context switching  
 **🔧 Full Control**: Your Worker, your API keys, your rate limits, your audit logs
 
@@ -25,24 +25,24 @@ Powered by Model Context Protocol (MCP), this tool brings professional GEO analy
   <img src="docs/demo.jpg" alt="GEO Analysis Demo" width="800">
 </div>
 
-*Claude analyzing a page and providing actionable GEO recommendations*
+*Claude analysing a page and providing actionable GEO recommendations*
 
 ---
 
 ## 🌟 What You Get
 
-### MCP-Powered Analysis in Claude Desktop
+### MCP-Powered Analysis in Claude Desktop i it's like a SAAS just without the UI, or the subscription fee.
 
-Talk naturally to Claude and get instant GEO analysis no switching contexts, no external tools, no manual work.
+Talk naturally to Claude and get instant GEO analysis - no switching contexts, no external tools, no manual work.
 
 **Three Powerful Tools at Your Command:**
-- **`analyze_url`**: Deep-dive analysis of any webpage with extractability scoring, semantic analysis, and prioritized recommendations
+- **`analyze_url`**: Deep-dive analysis of any webpage with extractability scoring, semantic analysis, and prioritised recommendations
 - **`compare_extractability`**: Side-by-side comparison of up to 5 URLs to benchmark against competitors
 - **`validate_rewrite`**: Before/after comparison proving your content improvements with percentage changes
 
 ### Technology Stack That Works for You
 
-**🔍 Content Extraction**: [Jina.ai Reader API](https://jina.ai/) strips away clutter and returns pristine markdown—1M tokens free per month  
+**🔍 Content Extraction**: [Jina.ai Reader API](https://jina.ai/) strips away clutter and returns pristine markdown - 1M tokens free per month  
 **🤖 Semantic Analysis**: Cloudflare Workers AI with Llama 3.3 70B extracts semantic triples, entities, and relationships  
 **⚙️ Pattern Analysis**: Custom regex-based scoring measures claim density, sentence structure, and temporal markers  
 **🔌 MCP Protocol**: Native integration with Claude Desktop via Anthropic's Model Context Protocol  
@@ -50,7 +50,7 @@ Talk naturally to Claude and get instant GEO analysis no switching contexts, no 
 ### Analysis Features
 
 **Extractability Scoring (0-10)**
-- Sentence length optimization (target: 15-20 words)
+- Sentence length optimisation (target: 15-20 words)
 - Claim density measurement (target: 4+ per 100 words)
 - Temporal marker detection for freshness signals
 
@@ -60,7 +60,7 @@ Talk naturally to Claude and get instant GEO analysis no switching contexts, no 
 - Entity diversity and relationship mapping
 
 **Actionable Recommendations**
-- Prioritized by impact (high/medium/low)
+- Prioritised by impact (high/medium/low)
 - Specific location references with line numbers
 - Before/after examples with clear rationale
 
@@ -90,7 +90,7 @@ Talk naturally to Claude and get instant GEO analysis no switching contexts, no 
    }
    ```
 7. **Restart Claude Desktop**
-8. **Test it**: Ask Claude `"Analyze https://example.com for 'your topic'"`
+8. **Test it**: Ask Claude `"Analyse https://example.com for 'your topic'"`
 
 ### Option 2: Manual Setup
 
@@ -113,7 +113,7 @@ Before deploying, ensure you have:
 
 **Free Tier Benefits:**
 - 1M tokens per month (roughly 250 page analyses per day)
-- Clean markdown output optimized for LLM processing  
+- Clean markdown output optimised for LLM processing  
 - Automatic image caption extraction
 - Link summary generation
 - Works with any publicly accessible URL
@@ -124,9 +124,9 @@ Before deploying, ensure you have:
 
 ## 🎯 What is GEO?
 
-Generative Engine Optimization (GEO) is the practice of optimizing content to appear in AI-generated responses from systems like ChatGPT, Claude, Perplexity and other LLM-based search engines.
+Generative Engine Optimisation (GEO) is the practice of optimizing content to appear in AI-generated responses from systems like ChatGPT, Claude, Perplexity and other LLM-based search engines.
 
-### Key Metrics Analyzed
+### Key Metrics Analysed
 
 | Metric | Target | What It Measures |
 |--------|--------|------------------|
@@ -138,7 +138,7 @@ Generative Engine Optimization (GEO) is the practice of optimizing content to ap
 
 ### The Research Behind GEO
 
-This tool implements methodologies from **"GEO: Generative Engine Optimization"** by Aggarwal et al., published at ACM SIGKDD 2024 ([read the full paper](https://arxiv.org/pdf/2311.09735)). The research analyzed 10,000 diverse queries across multiple AI systems to identify which content optimization techniques most effectively improve visibility in AI-generated responses.
+This tool implements methodologies from **"GEO: Generative Engine Optimization"** by Aggarwal et al., published at ACM SIGKDD 2024 ([read the full paper](https://arxiv.org/pdf/2311.09735)). The research analysed 10,000 diverse queries across multiple AI systems to identify which content optimisation techniques most effectively improve visibility in AI-generated responses.
 
 **Core Principles from the Research:**
 
@@ -148,13 +148,13 @@ This tool implements methodologies from **"GEO: Generative Engine Optimization"*
 
 **Readability**: How well-structured the content is for AI parsing through clear headings, lists, and logical chunking. Hierarchical structure improved AI comprehension and extraction accuracy.
 
-**Key Finding**: The research evaluated 9 optimization methods and found that traditional SEO approaches like keyword stuffing performed poorly (often reducing visibility). Instead, methods focused on **extractability** (claim density, semantic triples, entity extraction) delivered the strongest improvements—increasing AI citation rates by up to 40% compared to baseline content.
+**Key Finding**: The research evaluated 9 optimisation methods and found that traditional SEO approaches like keyword stuffing performed poorly (often reducing visibility). Instead, methods focused on **extractability** (claim density, semantic triples, entity extraction) delivered the strongest improvements, increasing AI citation rates by up to 40% compared to baseline content.
 
 ### About This Implementation
 
-This MCP server provides **methodology-based analysis**, not performance predictions. We measure factors the research identified as important for AI citability, helping you optimize content according to proven principles.
+This MCP server provides **methodology-based analysis**, not performance predictions. We measure factors the research identified as important for AI citability, helping you optimise content according to proven principles.
 
-**Important**: Results show what the analysis found, not guarantees about AI system behaviour. Use this as a guide for content optimization, not a prediction tool.
+**Important**: Results show what the analysis found, not guarantees about AI system behaviour. Use this as a guide for content optimisation, not a prediction tool.
 
 ---
 
@@ -174,7 +174,7 @@ This tool requires you to deploy your own Cloudflare Worker. There is no public 
 
 ### Your Data
 
-- **No Storage**: Content is analyzed in real-time, nothing is persisted
+- **No Storage**: Content is analysed in real-time, nothing is persisted
 - **No Tracking**: No analytics or usage tracking
 - **Your Infrastructure**: Runs on your Cloudflare account
 - **Your Logs**: Only you can access Worker logs and metrics
@@ -299,7 +299,7 @@ Ask Claude:
 Analyze https://example.com for the query "best practices"
 ```
 
-Claude will use the GEO Analyzer tool to provide detailed extractability metrics and recommendations.
+Claude will use the GEO Analyser tool to provide detailed extractability metrics and recommendations.
 
 ---
 
@@ -586,7 +586,7 @@ This project is built on research from:
 ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD '24)  
 [DOI: 10.1145/3637528.3671900](https://doi.org/10.1145/3637528.3671900) | [arXiv: 2311.09735](https://arxiv.org/abs/2311.09735)
 
-We thank the researchers for making their findings publicly available and contributing to the understanding of content optimization for AI systems.
+We thank the researchers for making their findings publicly available and contributing to the understanding of content optimisation for AI systems.
 
 ---
 
