@@ -35,10 +35,11 @@ Powered by Model Context Protocol (MCP), this tool brings professional GEO analy
 
 Talk naturally to Claude and get instant GEO analysis - no switching contexts, no external tools, no manual work.
 
-**Three Powerful Tools at Your Command:**
-- **`analyze_url`**: Deep-dive analysis of any webpage with extractability scoring, semantic analysis, and prioritised recommendations
-- **`compare_extractability`**: Side-by-side comparison of up to 5 URLs to benchmark against competitors
-- **`validate_rewrite`**: Before/after comparison proving your content improvements with percentage changes
+**Two Simple Tools:**
+- **`analyze_url`** - Analyze any published URL for AI search optimization
+- **`analyze_text`** - Analyze pasted text content without needing a URL
+
+Both tools provide the same comprehensive analysis: extractability scoring, semantic intelligence, writing quality assessment, and actionable recommendations with detailed explanations.
 
 ### Technology Stack That Works for You
 
@@ -49,20 +50,24 @@ Talk naturally to Claude and get instant GEO analysis - no switching contexts, n
 
 ### Analysis Features
 
-**Extractability Scoring (0-10)**
-- Sentence length optimisation (target: 15-20 words)
-- Claim density measurement (target: 4+ per 100 words)
-- Temporal marker detection for freshness signals
+**📊 Core Metrics**
+- Extractability scoring (0-10 scale)
+- Semantic triple extraction and entity recognition
+- Writing quality: active vs passive voice, AI slop detection
+- Data point analysis: statistics, research citations, numerical claims
+- E-E-A-T signals: authorship, credentials, expertise markers
 
-**Semantic Intelligence**
-- Subject-predicate-object triple extraction
-- Named entity recognition (PERSON, ORG, PRODUCT, etc.)
-- Entity diversity and relationship mapping
+**✍️ Writing Quality Assessment**
+- Active voice percentage calculation (target: 80%+)
+- AI-generated language detection with confidence scoring
+- Specific rewrite suggestions matching your content's tone
+- Passive voice instances with concrete examples
 
-**Actionable Recommendations**
-- Prioritised by impact (high/medium/low)
-- Specific location references with line numbers
-- Before/after examples with clear rationale
+**🎯 Comprehensive Recommendations**
+- Strengths and weaknesses analysis with emojis for quick scanning
+- Quick wins (5-minute fixes with high impact)
+- Priority actions with effort estimates, impact ratings, and expected improvements
+- Specific implementation guidance for each recommendation
 
 ---
 
@@ -90,7 +95,9 @@ Talk naturally to Claude and get instant GEO analysis - no switching contexts, n
    }
    ```
 7. **Restart Claude Desktop**
-8. **Test it**: Ask Claude `"Analyse https://example.com for 'your topic'"`
+8. **Test it**: 
+   - For URLs: `"Analyze https://example.com for 'your topic'"`
+   - For text: Paste your content and say `"Analyze this text for 'your topic'"`
 
 ### Option 2: Manual Setup
 
@@ -305,44 +312,32 @@ Claude will use the GEO Analyser tool to provide detailed extractability metrics
 
 ## 🎨 Usage Examples
 
-### Basic Analysis
+### Analyze a Published URL
 
 ```
 Analyze https://yoursite.com/blog/article for "content marketing"
 ```
 
-### Compare Multiple URLs
+### Analyze Pasted Text
 
 ```
-Compare GEO scores for these URLs:
-- https://site1.com/page
-- https://site2.com/page
-- https://site3.com/page
+Analyze this text for "content marketing":
 
-Target query: "your topic"
-```
-
-### Validate Content Improvements
-
-```
-I rewrote this content. Compare it to the original at https://site.com/original
-
-[Your optimized content here]
-
-Target query: "your topic"
+[Paste your content here]
 ```
 
 ---
 
 ## 🌟 Features
 
-### Three Powerful Tools
+### Two Simple Tools
 
 | Tool | Purpose | Use Case |
 |------|---------|----------|
-| **analyze_url** | Single page analysis | Audit existing content |
-| **compare_extractability** | Side-by-side comparison (2-5 URLs) | Competitor analysis |
-| **validate_rewrite** | Before/after comparison | Prove optimization works |
+| **analyze_url** | Published page analysis | Audit existing content on the web |
+| **analyze_text** | Draft content analysis | Review content before publishing |
+
+Both tools provide identical comprehensive analysis including extractability scores, semantic analysis, writing quality assessment, and actionable recommendations.
 
 ### AI Model Selection
 
