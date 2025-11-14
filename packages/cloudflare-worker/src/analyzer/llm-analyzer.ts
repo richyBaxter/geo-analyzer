@@ -370,7 +370,7 @@ Begin with { and end with }`;
             content: prompt,
           },
         ],
-        max_tokens: 4500,
+        max_tokens: 8000,
         temperature: 0.1,
       });
 
