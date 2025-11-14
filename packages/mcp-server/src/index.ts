@@ -268,6 +268,44 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ['originalUrl', 'optimizedContent', 'targetQuery'],
         },
       },
+      {
+        name: 'analyze_text',
+        description: 'Analyze pasted text content for AI search engine optimization using GEO principles. Use this when you have content to analyze without a URL. Returns detailed metrics, recommendations, and actionable insights.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            content: {
+              type: 'string',
+              description: 'The text content to analyze',
+            },
+            query: {
+              type: 'string',
+              description: 'The target search query to optimize for',
+            },
+            title: {
+              type: 'string',
+              description: 'Optional: Title for the content',
+            },
+            aiModel: {
+              type: 'string',
+              description: 'Optional: AI model for semantic analysis (default: @cf/meta/llama-3.3-70b-instruct-fp8-fast)',
+              enum: [
+                '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+                '@cf/meta/llama-3-8b-instruct',
+                '@cf/meta/llama-3.1-8b-instruct',
+                '@cf/mistral/mistral-7b-instruct-v0.1'
+              ],
+            },
+            output_format: {
+              type: 'string',
+              enum: ['detailed', 'summary'],
+              description: "Output verbosity: 'detailed' (default) includes all suggestions and recommendations; 'summary' provides condensed results",
+              default: 'detailed',
+            },
+          },
+          required: ['content', 'query'],
+        },
+      },
     ],
   };
 });
@@ -478,6 +516,61 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       throw new Error(`Failed to compare URLs: ${message}`);
+    }
+  }
+
+  if (request.params.name === 'analyze_text') {
+    const { content, query, title, aiModel, output_format = 'detailed' } = request.params.arguments as {
+      content: string;
+      query: string;
+      title?: string;
+      aiModel?: string;
+      output_format?: 'detailed' | 'summary';
+    };
+
+    if (!content || !query) {
+      throw new Error('Missing required parameters: content and query');
+    }
+
+    try {
+      const response = await fetch(`${GEO_API_URL}/api/analyze-text`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content,
+          query,
+          title,
+          aiModel,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(`API error: ${response.status} - ${error}`);
+      }
+
+      const result = await response.json();
+
+      const formattedResult = output_format === 'detailed' 
+        ? formatDetailedAnalysis(result)
+        : {
+            scores: result.geoAnalysis?.scores,
+            top_recommendations: result.geoAnalysis?.recommendations?.slice(0, 3),
+          };
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(formattedResult, null, 2),
+          },
+        ],
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Failed to analyze text: ${message}`);
     }
   }
 
