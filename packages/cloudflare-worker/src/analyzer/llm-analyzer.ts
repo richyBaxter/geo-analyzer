@@ -131,7 +131,7 @@ export class LLMAnalyzer {
     content: string,
     targetQuery: string
   ): Promise<LLMAnalysisResult> {
-    const truncatedContent = this.truncateContent(content, 60000);
+    const truncatedContent = this.truncateContent(content, 70000);
     
     const prompt = this.buildUnifiedPrompt(truncatedContent, targetQuery);
     
@@ -162,126 +162,62 @@ export class LLMAnalyzer {
   }
 
   private buildUnifiedPrompt(content: string, query: string): string {
-    const queryContext = query && query !== 'general content analysis'
-      ? `Target Query: "${query}"\n\nAnalyze how well this content would perform for searches related to "${query}".`
-      : `Infer the main topic from the content and analyze its AI search optimization potential.`;
-      
-    return `Analyze this content for AI search engine optimization.
+    return `You are an AI search optimization expert analyzing content for citation by answer engines (Google AI Overviews, Perplexity, ChatGPT).
 
-${queryContext}
+Target query: "${query}"
 
-Content:
+Content to analyze:
 ${content}
 
-Analyze the content holistically and return ONLY valid JSON (no markdown, no explanations):
+TASK: Comprehensive GEO analysis based on AI search optimization research and GEO-16 framework.
 
-{
-  "semanticTriples": [
-    {"subject": "example", "predicate": "demonstrates", "object": "concept", "confidence": 0.8, "isActiveVoice": true}
-  ],
-  "entities": [
-    {"text": "entity name", "type": "PERSON|ORGANIZATION|LOCATION|PRODUCT|TECHNOLOGY|METRIC", "context": "brief context", "importance": 0.7}
-  ],
-  "coherence": {
-    "coherent": true,
-    "missingContext": [],
-    "selfContained": true
-  },
-  "relevance": 0.8,
-  "structureQuality": {
-    "hasAnswerFirst": false,
-    "headingHierarchy": "clear",
-    "questionsCovered": []
-  },
-  "dataPointMetrics": {
-    "statisticsCount": 0,
-    "numericalClaimsCount": 0,
-    "researchCitationsCount": 0,
-    "specificExamples": []
-  },
-  "originalitySignals": {
-    "hasPersonalInsights": false,
-    "hasOriginalResearch": false,
-    "hasUniqueData": false,
-    "hasExpertOpinion": false,
-    "originalityScore": 0.5,
-    "genericPhrases": [],
-    "analysis": "Brief analysis of content originality and authenticity."
-  },
-  "writingQuality": {
-    "passiveVoiceInstances": 0,
-    "passiveVoiceExamples": [],
-    "activeVoicePercentage": 80,
-    "aiSlopIndicators": {
-      "detected": false,
-      "confidence": 0.0,
-      "problematicPhrases": []
-    },
-    "explanation": "Brief assessment of writing quality and voice."
-  },
-  "eeatSignals": {
-    "hasAuthorAttribution": false,
-    "hasCredentials": false,
-    "hasExpertiseMarkers": false,
-    "authorDetails": {
-      "present": false,
-      "location": "missing"
-    },
-    "trustSignals": [],
-    "analysis": "Brief E-E-A-T assessment."
-  },
-  "actionability": {
-    "hasActionableSteps": false,
-    "implementationGuidancePresent": false,
-    "clearNextSteps": [],
-    "actionabilityScore": 0.5,
-    "analysis": "Brief actionability assessment."
-  },
-  "entityCoverage": {
-    "coreEntityPresent": true,
-    "relatedEntitiesFound": [],
-    "missingRelatedEntities": [],
-    "entityDensityScore": 0.5,
-    "analysis": "Brief entity coverage assessment."
-  },
-  "overallAssessment": {
-    "strengths": [
-      "Strength 1",
-      "Strength 2",
-      "Strength 3"
-    ],
-    "weaknesses": [
-      "Weakness 1",
-      "Weakness 2",
-      "Weakness 3"
-    ],
-    "quickWins": [
-      "Quick win 1",
-      "Quick win 2",
-      "Quick win 3"
-    ],
-    "priorityActions": [
-      {
-        "action": "Action description",
-        "effort": "5 minutes",
-        "impact": "HIGH",
-        "reasoning": "Why this matters",
-        "implementation": "How to do it",
-        "expectedImprovement": "Expected result"
-      }
-    ]
-  }
-}
+YOUR MISSION: Provide a detailed diagnostic report with specific, actionable recommendations. Think like a content strategist who needs to explain EXACTLY what to change and WHY it matters.
 
-Guidelines:
-- Extract 3-10 semantic triples that represent key facts
-- Identify 3-10 important entities (people, organizations, products, etc)
-- Assess relevance to the target query (0-1 score)
-- Evaluate writing quality, originality, and structure
-- Provide 3-5 actionable recommendations in overallAssessment
-- Be realistic - use 0 for counts if nothing found, empty arrays if no examples
-- Focus on holistic content quality for AI search engines
-- Return ONLY the JSON object, nothing else`;
+CRITICAL ANALYSIS AREAS:
+
+1. SEMANTIC TRIPLES & ACTIVE VOICE
+   - Extract 5-10 factual triples in subject-predicate-object format
+   - FLAG any passive voice usage (reduces semantic clarity)
+   - Example GOOD: "Lake houses provide rental income"
+   - Example BAD: "Rental income is provided by lake houses"
+
+2. DATA POINTS & SPECIFICITY
+   - Count specific statistics, numbers, percentages
+   - Identify research findings or data-backed claims
+   - Flag generic statements lacking specificity
+   - Example GOOD: "Analysis of 2,500 properties showed 18% appreciation"
+   - Example BAD: "Properties might be a good investment"
+
+3. ORIGINALITY & INFORMATION GAIN
+   - Detect personal insights, original research, unique data
+   - Identify AI-generated content patterns (AI slop detection)
+   - Flag generic/boilerplate language common in AI content
+   - Common AI slop phrases: "delve into", "in today's digital landscape", 
+     "it's important to note", "comprehensive guide", "revolutionize", 
+     "game-changer", "unlock the secrets", "in conclusion"
+
+4. E-E-A-T SIGNALS (Experience, Expertise, Authority, Trust)
+   - Check for author attribution and credentials
+   - Detect expertise markers (certifications, experience, background)
+   - Identify trust signals (sources cited, transparency, methodology)
+   - Flag missing authorship information
+
+5. ACTIONABILITY
+   - Does content provide clear implementation steps?
+   - Are there specific next actions readers can take?
+   - Is guidance concrete vs. theoretical?
+
+6. ENTITY COVERAGE
+   - For the main topic, identify core entity
+   - List related entities that should be present for completeness
+   - Note missing entities that would strengthen context
+
+7. WRITING QUALITY
+   - Detect passive voice instances
+   - Calculate active voice percentage
+   - Provide rewrite suggestions for problematic phrases in document's tone
+
+CRITICAL: Return ONLY valid JSON with this EXACT structure. EVERY field is MANDATORY - you MUST analyze and populate ALL fields with specific findings:
 
 {
   "semanticTriples": [
@@ -423,7 +359,7 @@ Begin with { and end with }`;
 
   private async callLLM(prompt: string): Promise<string> {
     try {
-      const response = await this.ai.run(this.model, {
+      const response = await this.ai.run(this.model as any, {
         messages: [
           {
             role: 'system',
@@ -434,7 +370,7 @@ Begin with { and end with }`;
             content: prompt,
           },
         ],
-        max_tokens: 16000,
+        max_tokens: 4500,
         temperature: 0.1,
       });
 
