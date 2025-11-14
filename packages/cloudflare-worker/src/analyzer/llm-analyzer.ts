@@ -29,6 +29,7 @@ interface OriginalitySignals {
   hasExpertOpinion: boolean;
   originalityScore: number;
   genericPhrases: string[];
+  analysis?: string;
 }
 
 interface WritingQuality {
@@ -45,6 +46,7 @@ interface WritingQuality {
       reason: string;
     }>;
   };
+  explanation?: string;
 }
 
 interface EEATSignals {
@@ -56,6 +58,7 @@ interface EEATSignals {
     location: string;
   };
   trustSignals: string[];
+  analysis?: string;
 }
 
 interface ActionabilityAssessment {
@@ -63,6 +66,7 @@ interface ActionabilityAssessment {
   implementationGuidancePresent: boolean;
   clearNextSteps: string[];
   actionabilityScore: number;
+  analysis?: string;
 }
 
 interface EntityCoverageAnalysis {
@@ -70,6 +74,21 @@ interface EntityCoverageAnalysis {
   relatedEntitiesFound: string[];
   missingRelatedEntities: string[];
   entityDensityScore: number;
+  analysis?: string;
+}
+
+interface OverallAssessment {
+  strengths: string[];
+  weaknesses: string[];
+  quickWins: string[];
+  priorityActions: Array<{
+    action: string;
+    effort: string;
+    impact: string;
+    reasoning: string;
+    implementation: string;
+    expectedImprovement: string;
+  }>;
 }
 
 interface ChunkCoherence {
@@ -96,6 +115,7 @@ export interface LLMAnalysisResult {
   eeatSignals: EEATSignals;
   actionability: ActionabilityAssessment;
   entityCoverage: EntityCoverageAnalysis;
+  overallAssessment?: OverallAssessment;
 }
 
 export class LLMAnalyzer {
@@ -151,6 +171,8 @@ ${content}
 
 TASK: Comprehensive GEO analysis based on AI search optimization research and GEO-16 framework.
 
+YOUR MISSION: Provide a detailed diagnostic report with specific, actionable recommendations. Think like a content strategist who needs to explain EXACTLY what to change and WHY it matters.
+
 CRITICAL ANALYSIS AREAS:
 
 1. SEMANTIC TRIPLES & ACTIVE VOICE
@@ -195,31 +217,31 @@ CRITICAL ANALYSIS AREAS:
    - Calculate active voice percentage
    - Provide rewrite suggestions for problematic phrases in document's tone
 
-CRITICAL: Return ONLY valid JSON with this EXACT structure:
+CRITICAL: Return ONLY valid JSON with this EXACT structure. EVERY field is MANDATORY - you MUST analyze and populate ALL fields with specific findings:
 
 {
   "semanticTriples": [
-    {"subject": "string", "predicate": "string", "object": "string", "confidence": 0.9, "isActiveVoice": true}
+    {"subject": "Lake houses", "predicate": "provide", "object": "rental income", "confidence": 0.9, "isActiveVoice": true}
   ],
   "entities": [
-    {"text": "string", "type": "PERSON|ORGANIZATION|LOCATION|PRODUCT|TECHNOLOGY|METRIC", "context": "string", "importance": 0.8}
+    {"text": "GEO Analyzer", "type": "PRODUCT", "context": "tool for content optimization", "importance": 0.9}
   ],
   "coherence": {
     "coherent": true,
-    "missingContext": ["questions/topics not addressed"],
+    "missingContext": ["What problem does this solve?", "Who is the target audience?"],
     "selfContained": true
   },
   "relevance": 0.85,
   "structureQuality": {
     "hasAnswerFirst": true,
-    "headingHierarchy": "clear|partial|poor",
-    "questionsCovered": ["questions content answers"]
+    "headingHierarchy": "clear",
+    "questionsCovered": ["How does GEO work?", "What are the benefits?"]
   },
   "dataPointMetrics": {
     "statisticsCount": 5,
     "numericalClaimsCount": 8,
     "researchCitationsCount": 2,
-    "specificExamples": ["specific data examples found"]
+    "specificExamples": ["527% increase in AI-referred sessions", "39% of marketers report declining clicks"]
   },
   "originalitySignals": {
     "hasPersonalInsights": true,
@@ -227,11 +249,12 @@ CRITICAL: Return ONLY valid JSON with this EXACT structure:
     "hasUniqueData": true,
     "hasExpertOpinion": true,
     "originalityScore": 0.7,
-    "genericPhrases": ["list of AI slop phrases found"]
+    "genericPhrases": ["delve into", "in today's digital landscape"],
+    "analysis": "Content shows personal experience with AI tools and unique usage data, but lacks original research. Writing feels authentic with minimal AI slop."
   },
   "writingQuality": {
     "passiveVoiceInstances": 3,
-    "passiveVoiceExamples": ["example passive sentences"],
+    "passiveVoiceExamples": ["Traffic was declined by 39%", "Content is being analyzed by AI engines"],
     "activeVoicePercentage": 85,
     "aiSlopIndicators": {
       "detected": false,
@@ -239,12 +262,13 @@ CRITICAL: Return ONLY valid JSON with this EXACT structure:
       "problematicPhrases": [
         {
           "phrase": "in today's digital landscape",
-          "context": "surrounding sentence",
-          "suggestion": "Currently, businesses face",
-          "reason": "Generic AI-generated opener"
+          "context": "In today's digital landscape, businesses face challenges",
+          "suggestion": "Currently, businesses face digital challenges",
+          "reason": "Generic AI opener - lacks specificity and sounds robotic"
         }
       ]
-    }
+    },
+    "explanation": "Strong active voice usage at 85%. Only 3 passive constructions found. Minimal AI-generated language detected. Rewriting the 2 flagged phrases would improve authenticity."
   },
   "eeatSignals": {
     "hasAuthorAttribution": true,
@@ -254,27 +278,81 @@ CRITICAL: Return ONLY valid JSON with this EXACT structure:
       "present": true,
       "location": "header"
     },
-    "trustSignals": ["signals found"]
+    "trustSignals": ["External research citations", "First-hand experience"],
+    "analysis": "Author is clearly identified with expertise markers (uses tool personally, shares analytics). Missing: formal credentials or professional background. Adding 1-2 sentences about author's industry experience would strengthen authority."
   },
   "actionability": {
     "hasActionableSteps": true,
     "implementationGuidancePresent": true,
-    "clearNextSteps": ["specific actions listed"],
-    "actionabilityScore": 0.8
+    "clearNextSteps": ["Deploy to Cloudflare", "Configure MCP in Claude Desktop", "Run analysis on your content"],
+    "actionabilityScore": 0.8,
+    "analysis": "Content provides clear implementation steps with deployment instructions. Strong actionability. Could enhance with troubleshooting section or common gotchas."
   },
   "entityCoverage": {
     "coreEntityPresent": true,
-    "relatedEntitiesFound": ["entities present"],
-    "missingRelatedEntities": ["entities missing"],
-    "entityDensityScore": 0.7
+    "relatedEntitiesFound": ["GEO Analyzer", "Cloudflare", "Claude Desktop", "AI search engines"],
+    "missingRelatedEntities": ["Google AI Overviews", "Perplexity", "ChatGPT"],
+    "entityDensityScore": 0.7,
+    "analysis": "Main product entity well-covered. Related technologies mentioned. Missing explicit mentions of competing AI engines that would provide context."
+  },
+  "overallAssessment": {
+    "strengths": [
+      "💪 Strong active voice usage (85%) improves semantic extraction",
+      "📊 Good data density with 8 numerical claims and 5 statistics",
+      "✍️ Authentic writing with minimal AI-generated language (0.2 confidence)",
+      "⚡ High actionability (0.8) with clear implementation steps"
+    ],
+    "weaknesses": [
+      "👤 Missing author credentials - add professional background",
+      "📚 No original research - consider conducting surveys or analysis",
+      "🔗 Low research citations (only 2) - reference more authoritative studies",
+      "❓ Limited question coverage - address more user intents explicitly"
+    ],
+    "quickWins": [
+      "1️⃣ Add 2-3 sentence author bio with credentials (5 min, HIGH impact)",
+      "2️⃣ Replace 2 passive voice sentences with active constructions (2 min, MEDIUM impact)",
+      "3️⃣ Add 3-5 more statistics to strengthen credibility (10 min, HIGH impact)",
+      "4️⃣ Create FAQ section answering 5-7 common questions (20 min, HIGH impact)"
+    ],
+    "priorityActions": [
+      {
+        "action": "Add author credentials section",
+        "effort": "5 minutes",
+        "impact": "HIGH",
+        "reasoning": "E-E-A-T is critical for AI citation. Missing credentials reduces trustworthiness by 30-40%.",
+        "implementation": "Add after introduction: 'About the author: [Name] is a [title] with [X years] experience in [field]. Previously worked at [companies/projects].'",
+        "expectedImprovement": "+15-20% citation likelihood"
+      },
+      {
+        "action": "Increase data point density",
+        "effort": "15 minutes",
+        "impact": "HIGH",
+        "reasoning": "Content has only 5 statistics. Research shows 8-12 data points increase citation by 35%.",
+        "implementation": "Add specific metrics: conversion rates, performance benchmarks, user growth numbers, comparison data.",
+        "expectedImprovement": "+25-30% extractability score"
+      },
+      {
+        "action": "Convert passive to active voice",
+        "effort": "5 minutes",
+        "impact": "MEDIUM",
+        "reasoning": "3 passive constructions reduce semantic clarity. Active voice improves AI parsing.",
+        "implementation": "Before: 'Traffic was declined by 39%' → After: 'Traffic declined by 39%'. Before: 'Content is being analyzed' → After: 'AI engines analyze content'.",
+        "expectedImprovement": "+5-10% semantic triple extraction"
+      }
+    ]
   }
 }
 
-IMPORTANT:
-- For AI slop detection, match document's tone when suggesting rewrites
-- Be gentle but direct in feedback
-- Provide specific alternatives, not generic advice
-- Return ONLY JSON - NO markdown, NO explanations, NO preamble
+MANDATORY REQUIREMENTS:
+✅ ALL fields must be populated - no empty arrays or null values
+✅ Provide SPECIFIC examples, not generic placeholders
+✅ Include "analysis" fields with detailed explanations (2-4 sentences each)
+✅ "overallAssessment" must have 3-5 items in each array
+✅ "priorityActions" must include implementation details and expected improvements
+✅ Use emojis in overallAssessment for visual scanning
+✅ Be specific with numbers, locations, and concrete suggestions
+✅ Match document's tone when suggesting rewrites
+✅ Return ONLY JSON - NO markdown fences, NO preamble, NO trailing text
 
 Begin with { and end with }`;
   }
@@ -292,7 +370,7 @@ Begin with { and end with }`;
             content: prompt,
           },
         ],
-        max_tokens: 3500,
+        max_tokens: 4500,
         temperature: 0.1,
       });
 
@@ -353,6 +431,7 @@ Begin with { and end with }`;
         eeatSignals: this.validateEEATSignals(parsed.eeatSignals || {}),
         actionability: this.validateActionability(parsed.actionability || {}),
         entityCoverage: this.validateEntityCoverage(parsed.entityCoverage || {}),
+        overallAssessment: this.validateOverallAssessment(parsed.overallAssessment || {}),
       };
     } catch (error) {
       return this.createFallbackResult(originalContent, query);
@@ -452,6 +531,7 @@ Begin with { and end with }`;
       genericPhrases: Array.isArray(signals.genericPhrases)
         ? signals.genericPhrases.slice(0, 15).map(String)
         : [],
+      analysis: typeof signals.analysis === 'string' ? signals.analysis : undefined,
     };
   }
 
@@ -478,6 +558,7 @@ Begin with { and end with }`;
             }))
           : [],
       },
+      explanation: typeof quality.explanation === 'string' ? quality.explanation : undefined,
     };
   }
 
@@ -495,6 +576,7 @@ Begin with { and end with }`;
       trustSignals: Array.isArray(signals.trustSignals)
         ? signals.trustSignals.slice(0, 10).map(String)
         : [],
+      analysis: typeof signals.analysis === 'string' ? signals.analysis : undefined,
     };
   }
 
@@ -508,6 +590,7 @@ Begin with { and end with }`;
       actionabilityScore: typeof actionability.actionabilityScore === 'number'
         ? Math.min(1, Math.max(0, actionability.actionabilityScore))
         : 0.5,
+      analysis: typeof actionability.analysis === 'string' ? actionability.analysis : undefined,
     };
   }
 
@@ -523,6 +606,35 @@ Begin with { and end with }`;
       entityDensityScore: typeof coverage.entityDensityScore === 'number'
         ? Math.min(1, Math.max(0, coverage.entityDensityScore))
         : 0.5,
+      analysis: typeof coverage.analysis === 'string' ? coverage.analysis : undefined,
+    };
+  }
+
+  private validateOverallAssessment(assessment: any): OverallAssessment | undefined {
+    if (!assessment || typeof assessment !== 'object') {
+      return undefined;
+    }
+
+    return {
+      strengths: Array.isArray(assessment.strengths)
+        ? assessment.strengths.slice(0, 10).map(String)
+        : [],
+      weaknesses: Array.isArray(assessment.weaknesses)
+        ? assessment.weaknesses.slice(0, 10).map(String)
+        : [],
+      quickWins: Array.isArray(assessment.quickWins)
+        ? assessment.quickWins.slice(0, 10).map(String)
+        : [],
+      priorityActions: Array.isArray(assessment.priorityActions)
+        ? assessment.priorityActions.slice(0, 5).map((action: any) => ({
+            action: String(action.action || ''),
+            effort: String(action.effort || ''),
+            impact: String(action.impact || ''),
+            reasoning: String(action.reasoning || ''),
+            implementation: String(action.implementation || ''),
+            expectedImprovement: String(action.expectedImprovement || ''),
+          }))
+        : [],
     };
   }
 
