@@ -148,7 +148,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'analyze_url',
-        description: 'Analyze a published URL for AI search engine optimization. Fetches the content from the URL and provides GEO analysis with detailed recommendations.',
+        description: 'Analyze a published URL for AI search optimization. Just provide the URL - the tool will fetch and analyze the content automatically.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -158,7 +158,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             query: {
               type: 'string',
-              description: 'The target search query to optimize for',
+              description: 'Optional: Target keyword/topic to optimize for. If not provided, the tool will infer the main topic from the content.',
             },
             aiModel: {
               type: 'string',
@@ -177,12 +177,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               default: 'detailed',
             },
           },
-          required: ['url', 'query'],
+          required: ['url'],
         },
       },
       {
         name: 'analyze_text',
-        description: 'Analyze pasted text content for AI search engine optimization. Use this when you have content to analyze without a URL (e.g., draft content, pasted text). Provides the same GEO analysis as analyze_url.',
+        description: 'Analyze pasted text content for AI search optimization. Just provide the content - no URL needed. The tool will automatically analyze it.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -192,7 +192,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             query: {
               type: 'string',
-              description: 'The target search query to optimize for',
+              description: 'Optional: Target keyword/topic to optimize for. If not provided, the tool will infer the main topic from the content.',
             },
             title: {
               type: 'string',
@@ -215,7 +215,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               default: 'detailed',
             },
           },
-          required: ['content', 'query'],
+          required: ['content'],
         },
       },
     ],
@@ -224,17 +224,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (request.params.name === 'analyze_url') {
-    const { url, query, competitorUrls, autoDiscoverCompetitors, aiModel, output_format = 'detailed' } = request.params.arguments as {
+    const { url, query = 'general content analysis', aiModel, output_format = 'detailed' } = request.params.arguments as {
       url: string;
-      query: string;
-      competitorUrls?: string[];
-      autoDiscoverCompetitors?: boolean;
+      query?: string;
       aiModel?: string;
       output_format?: 'detailed' | 'summary';
     };
 
-    if (!url || !query) {
-      throw new Error('Missing required parameters: url and query');
+    if (!url) {
+      throw new Error('Missing required parameter: url');
     }
 
     try {
@@ -246,8 +244,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         body: JSON.stringify({
           url,
           query,
-          competitorUrls,
-          autoDiscoverCompetitors,
           jinaApiKey: JINA_API_KEY,
           aiModel,
         }),
@@ -282,16 +278,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   if (request.params.name === 'analyze_text') {
-    const { content, query, title, aiModel, output_format = 'detailed' } = request.params.arguments as {
+    const { content, query = 'general content analysis', title, aiModel, output_format = 'detailed' } = request.params.arguments as {
       content: string;
-      query: string;
+      query?: string;
       title?: string;
       aiModel?: string;
       output_format?: 'detailed' | 'summary';
     };
 
-    if (!content || !query) {
-      throw new Error('Missing required parameters: content and query');
+    if (!content) {
+      throw new Error('Missing required parameter: content');
     }
 
     try {

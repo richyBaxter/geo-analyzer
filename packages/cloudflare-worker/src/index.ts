@@ -64,9 +64,9 @@ export default {
       if (path === '/api/analyze' && request.method === 'POST') {
         const body = await request.json() as AnalyzeRequest;
         
-        if (!body.url || !body.query) {
+        if (!body.url) {
           return new Response(
-            JSON.stringify({ error: 'Missing required fields: url, query' }),
+            JSON.stringify({ error: 'Missing required field: url' }),
             { status: 400, headers: corsHeaders }
           );
         }
@@ -78,10 +78,8 @@ export default {
         
         const result = await analyzer.analyze(
           body.url,
-          body.query,
+          body.query || 'general content analysis',
           {
-            competitorUrls: body.competitorUrls,
-            autoDiscoverCompetitors: body.autoDiscoverCompetitors,
             aiModel: body.aiModel,
           }
         );
@@ -103,9 +101,9 @@ export default {
       if (path === '/api/analyze-text' && request.method === 'POST') {
         const body = await request.json() as AnalyzeTextRequest;
         
-        if (!body.content || !body.query) {
+        if (!body.content) {
           return new Response(
-            JSON.stringify({ error: 'Missing required fields: content, query' }),
+            JSON.stringify({ error: 'Missing required field: content' }),
             { status: 400, headers: corsHeaders }
           );
         }
@@ -128,7 +126,7 @@ export default {
         
         const result = await analyzer.analyzeText(
           body.content,
-          body.query,
+          body.query || 'general content analysis',
           {
             title: body.title,
             url: body.url,
